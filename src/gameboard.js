@@ -19,7 +19,7 @@ const gameboard = () => {
         {
           x: x,
          y: y,
-         ship: null,
+         ship: undefined,
          hit: null,
        }
        return coordinate;
@@ -80,7 +80,10 @@ const gameboard = () => {
 
           if(board[num1][num2].ship){
             board[num1][num2].ship.hit();
+            board[num1][num2].ship.isSunk();
             board[num1][num2].hit = true;
+            // see if all ships are sunk
+            checkAllSunk();
           }else {
             board[num1][num2].hit = false;
             console.log("YOU MISS");
@@ -88,8 +91,31 @@ const gameboard = () => {
           
           prettyPrint();
       }
-     return {location,addShip,hitShip,prettyPrint}; 
+      
+      function checkAllSunk(){
+        
+        let allSunk = board.every(coord => coord.every( element => checkShip(element)));
+// && coord.ship.sunk == false
+        console.log(allSunk , "allSunk");
+       if(allSunk){
+        return true;
+       }
+        else
+        return false;
+      }
+      function checkShip(coord){
+   
+          if(coord.ship == undefined) 
+          return true;
+          else if(coord.ship.getShip().sunk)
+          return true;
+          else
+          return false;
+      }
 
+     return {location,addShip,hitShip,prettyPrint,checkAllSunk}; 
+
+      
 }
 
 module.exports = gameboard;
