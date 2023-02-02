@@ -38,24 +38,45 @@ const gameboard = () => {
           let x = Math.round(Math.random() *9);
           let y = Math.round(Math.random() *9);
           let isHorizontal = Math.round(Math.random());
-
-          if(isHorizontal){
-            while(x< 0 || x > 9 || y < 0 || (y+length) > 9) y--;
-            
-            for(let i = 0 ;i < length; i++){
-              board[x][y+i].ship = battleship;
-            }
-        }
-        else{
-          while(x< 0 || x+length > 9 || y < 0 || y > 9) x--;
-          for(let i = 0 ;i < length; i++){
-            board[x+i][y].ship = battleship;
+          while(!checkNoShip(isHorizontal,length,x,y)){
+            x = Math.round(Math.random() *9);
+            y = Math.round(Math.random() *9);
           }
 
-        }
+          if(isHorizontal){
+            for(let i = 0 ;i < length; i++){
+              board[x+i][y].ship = battleship;
+            }
+          }
+              
+        else{
+          for(let i = 0 ;i < length; i++){
+            board[x][y+i].ship = battleship;
+          }
 
       }
 
+    }
+        function checkNoShip(isHorizontal,length,x,y){
+          if(isHorizontal){
+            if(x< 0 || (x+length) > 9 || y < 0 || y> 9)
+            return false;
+            for(let i = 0 ;i < length; i++){
+              if(board[x+i][y].ship != undefined)
+              return false;
+            } 
+          }
+          else {
+            if(x< 0 || x > 9 || y < 0 || (y+length) > 9)
+            return false;
+            for(let i = 0 ;i < length; i++){
+              if(board[x][y+i].ship != undefined)
+                return false;
+          }    
+     
+        }
+          return true;
+        }
       function addShip(num1,num2,size = 2, isHorizontal = true){
         const battleship = ship(size);
 
