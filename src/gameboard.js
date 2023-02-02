@@ -4,7 +4,8 @@ const ship = require('./ship');
 const gameboard = () => {
     let board = [[]]
     createBoard();
-    // [ [0,1,2,3,4,5,6,7,8,9] , 
+    
+    // [ [0 ,1, 2, 3, 4, 5, 6, 7, 8, 9] , 
     //   [10,11,12,13,14,15,16,17,18,19],
     //   [20,21,22,23,24,25,26,27,28,29],
     //   [30,31,32,33,34,35,36,37,38,39] 
@@ -17,12 +18,23 @@ const gameboard = () => {
     //   ]
 
       function createBoard() {
+      
         for(let i = 0; i <10;i ++){
           board.push([]);
           for(let o = 0; o <10; o++){
-            board[i].push(i*10+o);
+            board[i].push(createCoordinateObject(i,o));
           }
         }
+      }
+
+      function createCoordinateObject(x,y){
+        let coordinate =
+        {
+          x: x,
+         y: y,
+         ship: null,
+       }
+       return coordinate;
       }
       const location = (num1,num2) => {
           return board[num1][num2];
