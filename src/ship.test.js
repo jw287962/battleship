@@ -12,3 +12,8 @@ test('Create Ship Object ', () => {
 test('ship got hit', () => {
   expect(ship1.hit()).toBe(1)
 })
+
+test('ship is sunk', () => {
+  expect(ship1.hit()).toBe(2);
+  expect(ship1.isSunk()).toBeTruthy();
+})
