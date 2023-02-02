@@ -4,7 +4,10 @@ const ship = require('./ship');
 const gameboard = () => {
     let board = [[]]
     createBoard();
-    
+
+    function getBoard(){
+      return board;
+    }
       function createBoard() {
         for(let i = 0; i <10;i ++){
           board.push([]);
@@ -29,7 +32,29 @@ const gameboard = () => {
           return board[num1][num2];
       }
 
+      function fillBoardRandom(battleship){
+        let length = battleship.getShip().length;
 
+          let x = Math.round(Math.random() *9);
+          let y = Math.round(Math.random() *9);
+          let isHorizontal = Math.round(Math.random());
+
+          if(isHorizontal){
+            while(x< 0 || x > 9 || y < 0 || (y+length) > 9) y--;
+            
+            for(let i = 0 ;i < length; i++){
+              board[x][y+i].ship = battleship;
+            }
+        }
+        else{
+          while(x< 0 || x+length > 9 || y < 0 || y > 9) x--;
+          for(let i = 0 ;i < length; i++){
+            board[x+i][y].ship = battleship;
+          }
+
+        }
+
+      }
 
       function addShip(num1,num2,size = 2, isHorizontal = true){
         const battleship = ship(size);
@@ -96,7 +121,6 @@ const gameboard = () => {
         
         let allSunk = board.every(coord => coord.every( element => checkShip(element)));
 // && coord.ship.sunk == false
-        console.log(allSunk , "allSunk");
        if(allSunk){
         return true;
        }
@@ -113,7 +137,7 @@ const gameboard = () => {
           return false;
       }
 
-     return {location,addShip,hitShip,prettyPrint,checkAllSunk}; 
+     return {getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,fillBoardRandom}; 
 
       
 }
