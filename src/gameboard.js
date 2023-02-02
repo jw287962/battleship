@@ -20,6 +20,7 @@ const gameboard = () => {
           x: x,
          y: y,
          ship: null,
+         hit: false,
        }
        return coordinate;
       }
@@ -27,6 +28,8 @@ const gameboard = () => {
       const location = (num1,num2) => {
           return board[num1][num2];
       }
+
+
 
       function addShip(num1,num2,size = 2, isHorizontal = true){
         const battleship = ship(size);
@@ -54,17 +57,32 @@ const gameboard = () => {
         for(let i = 0; i <10;i ++){
           string += '\n'
           for(let o = 0; o <10; o++){
-            if(board[i][o].ship){
-              string +='[S]';
-            }else
+            if(!board[i][o].ship)
             string +='[ ]';
-
+            else if(board[i][o].ship.isSunk())
+            string += '[X]';
+            else if(board[i][o].hit) 
+            string += '[H]';
+            else if(board[i][o].ship)
+              string +='[S]';
           }
         }
         console.log(string);
+        return string;
       }
 
-     return {location,addShip}; 
+
+      function hitShip(num1,num2){
+          if(board[num1][num2].ship){
+            board[num1][num2].ship.hit();
+            board[num1][num2].hit = true;
+          }else {
+            console.log("YOU MISS");
+          }
+          
+          prettyPrint();
+      }
+     return {location,addShip,hitShip,prettyPrint}; 
 
 }
 
