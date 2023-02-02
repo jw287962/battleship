@@ -5,20 +5,7 @@ const gameboard = () => {
     let board = [[]]
     createBoard();
     
-    // [ [0 ,1, 2, 3, 4, 5, 6, 7, 8, 9] , 
-    //   [10,11,12,13,14,15,16,17,18,19],
-    //   [20,21,22,23,24,25,26,27,28,29],
-    //   [30,31,32,33,34,35,36,37,38,39] 
-    //   [40,41,42,43,44,45,46,47,48,49] , 
-    //   [41,42,42,43,44,45,46,47,48,49],
-    //   [50,51,52,53,54,55,56,57,58,59],
-    //   [0,1,2,3,4,5,6,7,8,9],
-    //   [0,1,2,3,4,5,6,7,8,9], 
-    //   [0,1,2,3,4,5,6,7,8,9]
-    //   ]
-
       function createBoard() {
-      
         for(let i = 0; i <10;i ++){
           board.push([]);
           for(let o = 0; o <10; o++){
@@ -36,13 +23,48 @@ const gameboard = () => {
        }
        return coordinate;
       }
+
       const location = (num1,num2) => {
           return board[num1][num2];
       }
 
+      function addShip(num1,num2,size = 2, isHorizontal = true){
+        const battleship = ship(size);
+
+        if(isHorizontal){
+            for(let i = 0 ;i < size; i ++){
+              board[num1][num2+i].ship = battleship;
+            }
+
+        }
+        else{
+          for(let i = 0 ;i < size; i ++){
+            board[num1+i][num1].ship = battleship;
+          }
+
+        }
+
+        prettyPrint();
+      }
 
 
-     return {location}; 
+     
+      function prettyPrint(){
+        let string = '';
+        for(let i = 0; i <10;i ++){
+          string += '\n'
+          for(let o = 0; o <10; o++){
+            if(board[i][o].ship){
+              string +='[S]';
+            }else
+            string +='[ ]';
+
+          }
+        }
+        console.log(string);
+      }
+
+     return {location,addShip}; 
 
 }
 
