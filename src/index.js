@@ -15,7 +15,8 @@ while(!winner){
   let x = Math.round(Math.random() *9);
   let y = Math.round(Math.random() *9);
 
-  let movePossible = player1.board.hitShip(x,y);
+  console.log('player 2 board');
+  let movePossible = player2.board.hitShip(x,y);
 while(movePossible === undefined){
     let x = Math.round(Math.random() *9);
     let y = Math.round(Math.random() *9);
@@ -28,8 +29,8 @@ while(movePossible === undefined){
         winner  = true;
         console.log(i);
   }
-
-  movePossible = player2.board.hitShip(x,y);  
+  console.log('player1 board');
+  movePossible = player1.board.hitShip(x,y);  
   while(movePossible === undefined){
     let x = Math.round(Math.random() *9);
     let y = Math.round(Math.random() *9);

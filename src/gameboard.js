@@ -103,7 +103,7 @@ const gameboard = () => {
         for(let i = 0; i <10;i ++){
           string += '\n'
           for(let o = 0; o <10; o++){
-             if(!board[i][o].hit) 
+             if(board[i][o].hit == false) 
             string += '[-]';
             else if(!board[i][o].ship)
             string +='[ ]';
