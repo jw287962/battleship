@@ -1,10 +1,24 @@
 
-const Ship = (length = 0,health = 3, sunk = false) => {
+const Ship = (length = 2, sunk = false) => {
  const ship = {
     length: length,
-    health: health,
+    health: length,
+    hits: 0,
     sunk: sunk,
   }
-  
 
+
+  const hit = () =>{
+    ship.hits += 1;
+    return ship.hits;
+  }
+
+  const getShip = () => {
+    return ship;
+  }
+
+  return {Ship,getShip,hit};
 }
+
+
+module.exports = Ship;

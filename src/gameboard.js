@@ -1,4 +1,5 @@
-import ship from './ship';
-// const ship = { length,health, sunk,}
+
+const ship = require('./ship');
+// const ship = { length, sunk,}
 const gameboard = () => {
 }
