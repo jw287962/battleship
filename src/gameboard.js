@@ -103,12 +103,13 @@ const gameboard = () => {
         for(let i = 0; i <10;i ++){
           string += '\n'
           for(let o = 0; o <10; o++){
-            if(!board[i][o].ship)
+             if(!board[i][o].hit) 
+            string += '[-]';
+            else if(!board[i][o].ship)
             string +='[ ]';
             else if(board[i][o].ship.isSunk())
             string += '[X]';
-            else if(board[i][o].hit) 
-            string += '[H]';
+            
             else if(board[i][o].ship)
               string +='[S]';
           }
@@ -120,7 +121,7 @@ const gameboard = () => {
 
       function hitShip(num1,num2){
           if(board[num1][num2].hit !== null) {
-            return 'coordinate has been chose';
+            return undefined;
           }
 
 
@@ -129,13 +130,17 @@ const gameboard = () => {
             board[num1][num2].ship.isSunk();
             board[num1][num2].hit = true;
             // see if all ships are sunk
-            checkAllSunk();
+            prettyPrint();
+           return true;
           }else {
             board[num1][num2].hit = false;
             console.log("YOU MISS");
+            prettyPrint();
+            return false;
           }
           
-          prettyPrint();
+       
+          
       }
       
       function checkAllSunk(){

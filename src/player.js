@@ -3,7 +3,8 @@ const ship = require('./ship');
 
 
 
-const player = () => {
+const player = (name,isAI) => {
+  let playerName = name;
   let board = gameboard(); 
 const ships = [];
 
@@ -31,9 +32,13 @@ fillAllShips();
       board.prettyPrint();
     }
     
+    function shootCoordinates(num1,num2){
+      if(board.hitShip(num1,num2));
+      console.log('YOU LOSE',this.playerName);
+    }
 
 
-    return {getAllShips,board}
+    return {getAllShips,board,shootCoordinates}
   }
 
 

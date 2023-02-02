@@ -2,8 +2,9 @@
 const gameboard = require('./gameboard');
 const player = require('./player');
 
-const player1 = player();
-
+let isAi = true;
+const player1 = player('Player1',!isAi);
+const player2 = player('AI',isAi);
 test.only('gameBoard can add ship randomly ', () => {
   let shipsNumber = 21;
   player1.board.getBoard().forEach(element => {
@@ -13,3 +14,5 @@ test.only('gameBoard can add ship randomly ', () => {
   });
   expect(shipsNumber).toBe(0);
 });
+
+
