@@ -3,7 +3,7 @@ const ship = require('./ship')
 let battleshipGame = gameboard();
 
 test('gameBoard has a board of coordinates ', () => {
-  expect(battleshipGame.location(5,9)).toEqual({"hit": false,"ship": null, "x": 5, "y": 9})
+  expect(battleshipGame.location(5,9)).toEqual({"hit": null,"ship": null, "x": 5, "y": 9})
 });
 
 
@@ -41,3 +41,9 @@ test('can sink ship ', () => {
 
 });
 
+
+
+test('choosing same coordinate twice will let me know ', () => {
+  battleshipGame.hitShip(2,2);
+  expect(battleshipGame.hitShip(2,2)).toBe('coordinate has been chose');
+});

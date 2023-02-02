@@ -20,7 +20,7 @@ const gameboard = () => {
           x: x,
          y: y,
          ship: null,
-         hit: false,
+         hit: null,
        }
        return coordinate;
       }
@@ -73,10 +73,16 @@ const gameboard = () => {
 
 
       function hitShip(num1,num2){
+          if(board[num1][num2].hit !== null) {
+            return 'coordinate has been chose';
+          }
+
+
           if(board[num1][num2].ship){
             board[num1][num2].ship.hit();
             board[num1][num2].hit = true;
           }else {
+            board[num1][num2].hit = false;
             console.log("YOU MISS");
           }
           
