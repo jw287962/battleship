@@ -18,9 +18,40 @@ const player2Board = document.querySelector('#playertwogrid');
 makeAGrid(player1Board);
 makeAGrid(player2Board);
 
-playGame();  //will need to change for when there is a user interface
+updateBoard();
 
 
+// playGame();  //will need to change for when there is a user interface
+
+
+function updateBoard(){
+  console.log(player1.board.prettyPrint());
+  player1.board.getBoard().forEach(element => {
+    element.forEach( element=> {
+      if(element.ship != undefined){
+        let number = "" + element.x+element.y;
+        const box = document.querySelector('#playeronegrid');
+        // box.childNodes.forEach(node => console.log(node));
+      box.childNodes[+number].textContent = "S";
+      }
+
+    })
+  });
+  console.log(player2.board.prettyPrint());
+  player2.board.getBoard().forEach(element => {
+    element.forEach( element=> {
+      if(element.ship != undefined){
+        let number = "" + element.x+element.y;
+
+        // HIDE THIS EVENTUALLY
+        const box = document.querySelector('#playertwogrid');
+        // box.childNodes.forEach(node => console.log(node));
+      box.childNodes[+number].textContent = "S";
+      }
+    })
+  });
+
+}
 
 
 
@@ -31,15 +62,16 @@ function makeAGrid(parentDiv){
         const boxGrid = document.createElement('div');
         boxGrid.classList.add('box');
         boxGrid.setAttribute('id',`${i}${o}`)
+        boxGrid.addEventListener('click',evalulatePlayerClick);
         parentDiv.appendChild(boxGrid);
     }
-
-
-
   }
 }
 
+function evalulatePlayerClick(e){
+  console.log(e.target.id,e.target.parentElement.id);
 
+}
 
 
 

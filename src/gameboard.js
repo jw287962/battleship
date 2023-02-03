@@ -114,7 +114,6 @@ const gameboard = () => {
               string +='[S]';
           }
         }
-        console.log(string);
         return string;
       }
 
