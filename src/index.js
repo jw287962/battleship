@@ -24,34 +24,6 @@ updateBoard();
 // playGame();  //will need to change for when there is a user interface
 
 
-function updateBoard(){
-  console.log(player1.board.prettyPrint());
-  player1.board.getBoard().forEach(element => {
-    element.forEach( element=> {
-      if(element.ship != undefined){
-        let number = "" + element.x+element.y;
-        const box = document.querySelector('#playeronegrid');
-        // box.childNodes.forEach(node => console.log(node));
-      box.childNodes[+number].textContent = "S";
-      }
-
-    })
-  });
-  console.log(player2.board.prettyPrint());
-  player2.board.getBoard().forEach(element => {
-    element.forEach( element=> {
-      if(element.ship != undefined){
-        let number = "" + element.x+element.y;
-
-        // HIDE THIS EVENTUALLY
-        const box = document.querySelector('#playertwogrid');
-        // box.childNodes.forEach(node => console.log(node));
-      box.childNodes[+number].textContent = "S";
-      }
-    })
-  });
-
-}
 
 
 
@@ -69,10 +41,75 @@ function makeAGrid(parentDiv){
 }
 
 function evalulatePlayerClick(e){
-  console.log(e.target.id,e.target.parentElement.id);
+  console.log(player1.board.turn, "p1");
+  console.log(player2.board.turn, "p2");
+  if(player1.board.turn == player2.board.turn && e.target.parentElement.id === 'playertwogrid' ){
+    // player 1 turn
+    player1.board.turn++
+    let coord = e.target.id.split('');
+    if(player2.board.hitShip(coord[0],coord[1]) == undefined){
+      player1.board.turn--;
+    }
+    
+  
+    // if(e.target)
+      updateBoard();
+  }
+  else if (player1.board.turn > player2.board.turn && e.target.parentElement.id === 'playeronegrid'){
+    //player 2 turn
+    player2.board.turn++;
+
+    let coord = e.target.id.split('');
+    if(player1.board.hitShip(coord[0],coord[1]) == undefined){
+      player2.board.turn--;
+    };
+    // if(e.target)
+    updateBoard();
+  }else{
+    console.log('ALL UNITS MUST ATTACK ENEMY.')
+
+  }
 
 }
 
+function updateBoard(){
+  console.log(player1.board.prettyPrint());
+  player1.board.getBoard().forEach(element => {
+    element.forEach( element=> {
+      let number = "" + element.x+element.y;
+        const box = document.querySelector('#playeronegrid');
+      if(element.hit == false) 
+      box.childNodes[+number].textContent = '-';
+      else if(!element.ship)
+      box.childNodes[+number].textContent ='';
+      else if(element.ship.isSunk())
+      box.childNodes[+number].textContent = 'X';
+      else if(element.hit == true) 
+      box.childNodes[+number].textContent = '+';
+      else if(element.ship)
+      box.childNodes[+number].textContent = "S";
+    })
+  });
+  console.log(player2.board.prettyPrint());
+  player2.board.getBoard().forEach(element => {
+    element.forEach( element=> {
+      let number = "" + element.x+element.y;
+        const box = document.querySelector('#playertwogrid');
+   
+        if(element.hit == false) 
+        box.childNodes[+number].textContent = '-';
+        else if(!element.ship)
+        box.childNodes[+number].textContent ='';
+        else if(element.ship.isSunk())
+        box.childNodes[+number].textContent = 'X';
+        else if(element.hit == true) 
+        box.childNodes[+number].textContent = '+';
+        else if(element.ship)
+        box.childNodes[+number].textContent = "S";
+    })
+  });
+
+}
 
 
 
@@ -86,12 +123,12 @@ while(!winner){
   let x = Math.round(Math.random() *9);
   let y = Math.round(Math.random() *9);
   console.log('player 2 board');
-  findMove(player2,x,y);
+  // findMove(player2,x,y);
 checkWinner(player2);
   console.log('player1 board');
  player1.board.hitShip(x,y);  
 
- findMove(player1,x,y);
+//  findMove(player1,x,y);
 
   checkWinner(player1);
 
@@ -108,21 +145,24 @@ checkWinner(player2);
 function findMove(player,x,y){
   if(player.playerNumber == 1){
     let movePossible = player2.board.hitShip(x,y);
-    while(movePossible === undefined){
-        let x = Math.round(Math.random() *9);
-        let y = Math.round(Math.random() *9);
-        movePossible = player1.board.hitShip(x,y);
-      }
+ 
   }
   else {
     let movePossible = player1.board.hitShip(x,y);
-    while(movePossible === undefined){
-        let x = Math.round(Math.random() *9);
-        let y = Math.round(Math.random() *9);
-        movePossible = player2.board.hitShip(x,y);
-      }
+ 
   }
-  
+     // while(movePossible === undefined){
+    //     let x = Math.round(Math.random() *9);
+    //     let y = Math.round(Math.random() *9);
+    //     movePossible = player1.board.hitShip(x,y);
+    //   }
+
+
+     // while(movePossible === undefined){
+    //     let x = Math.round(Math.random() *9);
+    //     let y = Math.round(Math.random() *9);
+    //     movePossible = player2.board.hitShip(x,y);
+    //   }
 }
 
 }

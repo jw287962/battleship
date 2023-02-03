@@ -4,6 +4,7 @@ const ship = require('./ship');
 const gameboard = () => {
     let board = [[]]
     createBoard();
+    let turn = 0;
 
     function getBoard(){
       return board;
@@ -135,6 +136,7 @@ const gameboard = () => {
             board[num1][num2].hit = false;
             console.log("YOU MISS");
             prettyPrint();
+            console.log(turn, "updated")
             return false;
           }
           
@@ -162,7 +164,7 @@ const gameboard = () => {
           return false;
       }
 
-     return {getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,fillBoardRandom}; 
+     return {turn,getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,fillBoardRandom}; 
 
       
 }
