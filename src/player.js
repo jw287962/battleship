@@ -39,8 +39,11 @@ fillAllShips();
       console.log('YOU LOSE',this.playerName);
     }
 
+    function getName(){
+      return name;
+    }
 
-    return {getAllShips,board,shootCoordinates, playerNumber}
+    return {getAllShips,board,shootCoordinates, playerNumber,getName}
   }
 
 
