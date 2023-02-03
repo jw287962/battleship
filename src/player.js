@@ -3,8 +3,10 @@ const ship = require('./ship');
 
 
 
-const player = (name,isAI) => {
+const player = (name,isAI,number = 1) => {
+
   let playerName = name;
+  let playerNumber = number;
   let board = gameboard(); 
 const ships = [];
 
@@ -38,7 +40,7 @@ fillAllShips();
     }
 
 
-    return {getAllShips,board,shootCoordinates}
+    return {getAllShips,board,shootCoordinates, playerNumber}
   }
 
 
