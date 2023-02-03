@@ -138,24 +138,24 @@ if(player1.board.checkAllSunk()){
 }
 }
 
-function findMoveAI(){
-  let x = Math.round(Math.random() *9);
-  let y = Math.round(Math.random() *9);
+// function findMoveAI(){
+//   let x = Math.round(Math.random() *9);
+//   let y = Math.round(Math.random() *9);
 
-    let movePossible = player1.board.hitShip(x,y);
+//     let movePossible = player1.board.hitShip(x,y);
     
-     while(movePossible === undefined){
-        let x = Math.round(Math.random() *9);
-        let y = Math.round(Math.random() *9);
+//      while(movePossible === undefined){
+//         let x = Math.round(Math.random() *9);
+//         let y = Math.round(Math.random() *9);
        
-      }
-      if(movePossible == true){
+//       }
+//       if(movePossible == true){
         
-      }
-      movePossible = player1.board.hitShip(x,y);
-     // while(movePossible === undefined){
-    //     let x = Math.round(Math.random() *9);
-    //     let y = Math.round(Math.random() *9);
-    //     movePossible = player2.board.hitShip(x,y);
-    //   }
-}
+//       }
+//       movePossible = player1.board.hitShip(x,y);
+//      // while(movePossible === undefined){
+//     //     let x = Math.round(Math.random() *9);
+//     //     let y = Math.round(Math.random() *9);
+//     //     movePossible = player2.board.hitShip(x,y);
+//     //   }
+// }
