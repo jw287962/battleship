@@ -42,6 +42,10 @@ function makeAGrid(parentDiv){
 }
 
 function evalulatePlayerClick(e){
+  if(player1.isWinner() ||  player2.isWinner()){
+    return;
+  }
+  
     if(player1.board.turn == player2.board.turn && e.target.parentElement.id === 'playertwogrid' ){
     // player 1 turn
     player1.board.turn++
@@ -51,30 +55,23 @@ function evalulatePlayerClick(e){
       return;
     }
       updateBoard();
-      if(player2.board.checkAllSunk()){
-          console.log(player1.getName(), 'won');
-      }
+      checkWinner();
+   
   }else{
   console.log('ALL UNITS MUST ATTACK ENEMY.')
   return;
-
 }
-  // else if (player1.board.turn > player2.board.turn && e.target.parentElement.id === 'playeronegrid'){
-    //player 2 turn
     player2.board.turn++;
-
-    // let coord = e.target.id.split('');
-
-    findMoveAI();
-
+    player1.shootCoordinates(0,0,player2.isAI);
     updateBoard();
-    if(player1.board.checkAllSunk()){
-      console.log(player1.getName(), 'won');
-    // }
- 
-  checkTurn();
 
-    }
+
+    checkTurn();
+
+    checkWinner();
+
+
+    
 }
 function checkTurn(){
   const turnDiv = document.querySelector('.turn');
@@ -86,7 +83,6 @@ function checkTurn(){
   }
 }
 function updateBoard(){
-  console.log(player1.board.prettyPrint());
   player1.board.getBoard().forEach(element => {
     element.forEach( element=> {
       let number = "" + element.x+element.y;
@@ -104,7 +100,6 @@ function updateBoard(){
       box.childNodes[+number].classList.toggle('ship');
     })
   });
-  console.log(player2.board.prettyPrint());
 
   player2.board.getBoard().forEach(element => {
     element.forEach( element=> {
@@ -130,19 +125,34 @@ function updateBoard(){
 }
 
 
+function checkWinner(){
+  const turnDiv = document.querySelector('.turn');
 
+  if(player2.board.checkAllSunk()){
+    turnDiv.textContent = "Player 1 WON";
+    player1.won();
+}
+if(player1.board.checkAllSunk()){
+  turnDiv.textContent = "Player 2 WON";
+  player2.won();
+}
+}
 
 function findMoveAI(){
   let x = Math.round(Math.random() *9);
   let y = Math.round(Math.random() *9);
+
     let movePossible = player1.board.hitShip(x,y);
+    
      while(movePossible === undefined){
         let x = Math.round(Math.random() *9);
         let y = Math.round(Math.random() *9);
-        movePossible = player1.board.hitShip(x,y);
+       
       }
-
-
+      if(movePossible == true){
+        
+      }
+      movePossible = player1.board.hitShip(x,y);
      // while(movePossible === undefined){
     //     let x = Math.round(Math.random() *9);
     //     let y = Math.round(Math.random() *9);

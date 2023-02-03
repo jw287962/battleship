@@ -3,13 +3,16 @@ const ship = require('./ship');
 
 
 
-const player = (name,isAI,number = 1) => {
-
-  let playerName = name;
-  let playerNumber = number;
-  let board = gameboard(); 
+const player = (name,isAInt,number = 1) => {
+  const isAI = isAInt;
+  const playerName = name;
+  const playerNumber = number;
+  const board = gameboard(); 
 const ships = [];
+const shipCoordinates = [];
+const possibleMoves = [];
 
+let winner = false; 
 for(let i = 0; i <7; i++){
   let num;
   if(i <= 2)  num = 2;
@@ -34,16 +37,60 @@ fillAllShips();
       board.prettyPrint();
     }
     
-    function shootCoordinates(num1,num2){
-      if(board.hitShip(num1,num2));
-      console.log('YOU LOSE',this.playerName);
-    }
+    function shootCoordinates(x =0 ,y = 0,isRobot){
+      if(isRobot){
+            let x = Math.round(Math.random() *9);
+            let y = Math.round(Math.random() *9);
 
+        // if(shipCoordinates.length >= 1){
+        //   if(board.checkIsShip(board.location(shipCoordinates[0],shipCoordinates[1])))
+        //     shipCoordinates.splice(0,shipCoordinates.length);
+        //     else{
+        //       x = shipCoordinates[0];
+        //       y =  shipCoordinates[1];
+        //       possibleMoves.push(x+1,y);
+        //       possibleMoves.push(x-1,y);
+        //       possibleMoves.push(x,y-1);
+        //       possibleMoves.push(x,y+1);
+        //       let coord = possibleMoves.splice(0,1);
+        //       while(possibleMoves.length !=0 && board.hitShip(coord[0][0],coord[0][1]) == undefined ){
+        //         coord = possibleMoves.splice(0,1);
+        //       };
+
+
+        //     }
+        // }
+          let movePossible = board.hitShip(x,y);
+        
+          while(movePossible === undefined){
+              let x = Math.round(Math.random() *9);
+              let y = Math.round(Math.random() *9);
+              movePossible = board.hitShip(x,y);
+            }
+          if(movePossible == true){
+            shipCoordinates.push(x);
+            shipCoordinates.push(y);
+          }
+          console.log(shipCoordinates);
+
+      
+      }else{
+        
+        console.log('human');
+        board.hitShip(x,y)
+      }
+    }
+    function isWinner(){
+      return winner;
+    }
+    function won(){
+       winner = true;
+    }
     function getName(){
       return name;
     }
 
-    return {getAllShips,board,shootCoordinates, playerNumber,getName}
+    return {getAllShips,board,shootCoordinates, playerNumber,getName,isAI,isWinner,won}
   }
 
 

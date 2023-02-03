@@ -30,6 +30,8 @@ const gameboard = () => {
       }
 
       const location = (num1,num2) => {
+        console.log(num1,num2)
+        console.log(board[num1][num2])
           return board[num1][num2];
       }
 
@@ -134,9 +136,7 @@ const gameboard = () => {
            return true;
           }else {
             board[num1][num2].hit = false;
-            console.log("YOU MISS");
             prettyPrint();
-            console.log(turn, "updated")
             return false;
           }
           
@@ -155,16 +155,24 @@ const gameboard = () => {
         return false;
       }
       function checkShip(coord){
-   
           if(coord.ship == undefined) 
           return true;
-          else if(coord.ship.getShip().sunk)
-          return true;
+          else if(coord.ship.getShip().sunk)  
+          return true;  
           else
           return false;
       }
 
-     return {turn,getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,fillBoardRandom}; 
+      function checkIsShip(coord){
+        if(coord.ship == undefined) 
+        return false;
+        else if(coord.ship.isSunk())  
+        return true;   //lol redudnat?
+        else
+        return false;
+    }
+
+     return {turn,getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,checkIsShip,fillBoardRandom}; 
 
       
 }
