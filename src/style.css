@@ -88,3 +88,19 @@ body{
   background-color: red;
 
 }
+
+
+.restart{
+  background-color: white;
+  border: 1px solid grey;
+  margin: 3px;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  left: 0;
+}
+
+button:active{
+  position: absolute;
+top: 20px;
+}

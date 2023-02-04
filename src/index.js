@@ -5,12 +5,25 @@ import css from "./style.css";
 
 let isAi = true;
 
-const player1 = player('Player1',!isAi,1);
-const player2 = player('AI',isAi,2);
+let player1 = player('Player1',!isAi,1);
+let player2 = player('AI',isAi,2);
 
 let i = 0; 
 let winner = false;
+
+const newGameDiv = document.querySelector('.restart');
+newGameDiv.addEventListener('click',playGame);
+
+
+playGame();
+
+
+
 // make a board on website
+function playGame(){
+   player1 = player('Player1',!isAi,1);
+ player2 = player('AI',isAi,2);
+  console.log("new game")
 
 const player1Board = document.querySelector('#playeronegrid');
 const player2Board = document.querySelector('#playertwogrid');
@@ -21,6 +34,7 @@ makeAGrid(player2Board);
 
 updateBoard();
 
+}
 
 // playGame();  //will need to change for when there is a user interface
 
@@ -29,10 +43,11 @@ updateBoard();
 
 
 function makeAGrid(parentDiv){
-
+  parentDiv.innerHTML = "";
   for(let i = 0;i< 10;i++){
     for(let o =0;o <10;o++){
         const boxGrid = document.createElement('div');
+        
         boxGrid.classList.add('box');
         boxGrid.setAttribute('id',`${i}${o}`)
         boxGrid.addEventListener('click',evalulatePlayerClick);
