@@ -39,34 +39,45 @@ fillAllShips();
     
     function shootCoordinates(x =0 ,y = 0,isRobot){
       if(isRobot){
-            let x = Math.round(Math.random() *9);
-            let y = Math.round(Math.random() *9);
+             x = Math.round(Math.random() *9);
+             y = Math.round(Math.random() *9);
 
-        // if(shipCoordinates.length >= 1){
-        //   if(board.checkIsShip(board.location(shipCoordinates[0],shipCoordinates[1])))
-        //     shipCoordinates.splice(0,shipCoordinates.length);
-        //     else{
-        //       x = shipCoordinates[0];
-        //       y =  shipCoordinates[1];
-        //       possibleMoves.push(x+1,y);
-        //       possibleMoves.push(x-1,y);
-        //       possibleMoves.push(x,y-1);
-        //       possibleMoves.push(x,y+1);
-        //       let coord = possibleMoves.splice(0,1);
-        //       while(possibleMoves.length !=0 && board.hitShip(coord[0][0],coord[0][1]) == undefined ){
-        //         coord = possibleMoves.splice(0,1);
-        //       };
-
-
-        //     }
-        // }
+        if(shipCoordinates.length >= 1 || possibleMoves.length >= 1){
+          // if(board.checkIsShip(board.location(shipCoordinates[0],shipCoordinates[1])))
+          //   shipCoordinates.splice(0,shipCoordinates.length);
+          //   else{
+            if(shipCoordinates.length >= 1){
+              x = shipCoordinates.splice(0,1)[0];
+              y =  shipCoordinates.splice(0,1)[0];
+              possibleMoves.push(x+1,y);
+              possibleMoves.push(x-1,y);
+              possibleMoves.push(x,y-1);
+              possibleMoves.push(x,y+1);
+            }
+              let coord = possibleMoves.splice(0,2);
+                let hitWhat = board.hitShip(coord[0],coord[1])
+              while(possibleMoves.length !=0 &&  hitWhat == undefined ){
+                console.log(possibleMoves);
+                coord = possibleMoves.splice(0,2);
+                hitWhat  = board.hitShip(coord[0],coord[1]);
+              };
+              if(hitWhat != undefined){
+                // console.log(hitWhat);
+                  if(hitWhat){
+                    shipCoordinates.push(coord[0]);
+                    shipCoordinates.push(coord[1]);
+                  }
+                return;
+              }
+        }
           let movePossible = board.hitShip(x,y);
         
           while(movePossible === undefined){
-              let x = Math.round(Math.random() *9);
-              let y = Math.round(Math.random() *9);
+               x = Math.round(Math.random() *9);
+               y = Math.round(Math.random() *9);
               movePossible = board.hitShip(x,y);
             }
+            console.log(movePossible, x,y);
           if(movePossible == true){
             shipCoordinates.push(x);
             shipCoordinates.push(y);

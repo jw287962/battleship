@@ -30,8 +30,6 @@ const gameboard = () => {
       }
 
       const location = (num1,num2) => {
-        console.log(num1,num2)
-        console.log(board[num1][num2])
           return board[num1][num2];
       }
 
@@ -122,19 +120,24 @@ const gameboard = () => {
 
 
       function hitShip(num1,num2){
-          if(board[num1][num2].hit !== null) {
+
+        if(num1 < 0 || num2< 0 || num1 >9 || num2 > 9){
+          return undefined;
+        }
+          if(board[num1][num2].hit !== null) { 
+            //can't hit something already hit before
             return undefined;
           }
 
 
-          if(board[num1][num2].ship){
+          if(board[num1][num2].ship){ //if a ship  
             board[num1][num2].ship.hit();
             board[num1][num2].ship.isSunk();
             board[num1][num2].hit = true;
             // see if all ships are sunk
             prettyPrint();
            return true;
-          }else {
+          }else {   //if a miss
             board[num1][num2].hit = false;
             prettyPrint();
             return false;
