@@ -12,7 +12,11 @@ let i = 0;
 let winner = false;
 
 const newGameDiv = document.querySelector('.restart');
+const startGameDiv = document.querySelector('.start')
+
+// button to start game 
 newGameDiv.addEventListener('click',playGame);
+startGameDiv.addEventListener('click',addEventListenerGameStart);
 
 
 playGame();
@@ -21,6 +25,7 @@ playGame();
 
 // make a board on website
 function playGame(){
+  startGameDiv.classList.remove('hidden');
    player1 = player('Player1',!isAi,1);
  player2 = player('AI',isAi,2);
   console.log("new game")
@@ -36,12 +41,49 @@ updateBoard();
 
 }
 
+
+
 // playGame();  //will need to change for when there is a user interface
 
+function addEventListenerGameStart(e){
+  e.preventDefault();
+  console.log('addListenrs')
 
+  startGameDiv.classList.toggle('hidden');
+  player2.board.getBoard().forEach(element => {
+    element.forEach( element=> {
+      let number = "" + element.x+element.y;
+        const box = document.querySelector('#playertwogrid');
+        box.childNodes[+number].addEventListener('click',evalulatePlayerClick);
+     
+    })
+  });
+}
 
+function dragShip(e){
+  // console.log(e.target.classList[2]);
+  let shipName = e.target.classList[2];
+  const ship = document.getElementsByClassName(shipName);
+  // let shipCoordinate = [];
+  // console.log(ship);
+  e.dataTransfer.setData("text", e.target.classList);
+  e.dataTransfer.dropEffect = "copy";
+  // for(let i = 0; i < ship.length;i++){
+  //   shipCoordinate.push(ship[i].id);
 
+  // }
+}
 
+function dragShipEnd(e){
+  console.log(e, 'dropend')
+  e.preventDefault();
+let data = e.dataTransfer.getData("text");
+console.log(data);
+e.target.classList.add('ship');
+}
+function onDropShip(e){
+console.log(e, 'on drop')
+}
 function makeAGrid(parentDiv){
   parentDiv.innerHTML = "";
   for(let i = 0;i< 10;i++){
@@ -50,14 +92,33 @@ function makeAGrid(parentDiv){
         
         boxGrid.classList.add('box');
         boxGrid.setAttribute('id',`${i}${o}`)
-        boxGrid.addEventListener('click',evalulatePlayerClick);
+        if(player1.board.getBoard()[i][o].ship){
+          boxGrid.draggable  = true;
+          boxGrid.addEventListener('dragstart',dragShip);
+         
+        }
+        boxGrid.addEventListener('ondrop',onDropShip);
+        boxGrid.addEventListener('dropend',dragShipEnd);
         parentDiv.appendChild(boxGrid);
     }
   }
 }
 
 function evalulatePlayerClick(e){
+  e.preventDefault();
   if(player1.isWinner() ||  player2.isWinner()){
+    return;
+  }
+  if(player1.board.turn+player2.board.turn == 0 && e.target.parentElement.id === 'playeronegrid' ){
+    //game has not started. can move ships....
+      let coord = e.target.id.split('');
+      if(player1.board.checkIsShip(player1.board.location(coord[0],coord[1]))){
+        // var data = e.dataTransfer.getData(e.target);
+        console.log(e.dataTransfer.setData("text","hi"));
+  
+    }
+    
+
     return;
   }
   
@@ -100,6 +161,7 @@ function checkTurn(){
 function updateBoard(){
   player1.board.getBoard().forEach(element => {
     element.forEach( element=> {
+      let num = 0;
       let number = "" + element.x+element.y;
         const box = document.querySelector('#playeronegrid');
         box.childNodes[+number].textContent = '';
@@ -111,8 +173,18 @@ function updateBoard(){
       box.childNodes[+number].classList.toggle('sunk');
       else if(element.hit == true) 
       box.childNodes[+number].classList.toggle('hit');
-      else if(element.ship)
-      box.childNodes[+number].classList.toggle('ship');
+      else if(element.ship){
+
+      player1.board.shipsArray.forEach(ship => {
+        if(ship.getShip() === element.ship.getShip()){
+          box.childNodes[+number].classList.toggle(`ship`);
+          box.childNodes[+number].classList.add(`ship${num}`);
+        }
+        num++;
+      });
+
+
+      }
     })
   });
 

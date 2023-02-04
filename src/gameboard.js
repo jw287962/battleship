@@ -5,6 +5,7 @@ const gameboard = () => {
     let board = [[]]
     createBoard();
     let turn = 0;
+    let shipsArray = [];
 
     function getBoard(){
       return board;
@@ -34,17 +35,17 @@ const gameboard = () => {
       }
 
       function fillBoardRandom(battleship){
+        shipsArray.push(battleship);
         let length = battleship.getShip().length;
 
           let x = Math.round(Math.random() *9);
           let y = Math.round(Math.random() *9);
-          let isHorizontal = Math.round(Math.random());
-          while(!checkNoShip(isHorizontal,length,x,y)){
+          while(!checkNoShip(battleship.isShipHorizontal(),length,x,y)){
             x = Math.round(Math.random() *9);
             y = Math.round(Math.random() *9);
           }
 
-          if(isHorizontal){
+          if(battleship.isShipHorizontal()){
             for(let i = 0 ;i < length; i++){
               board[x+i][y].ship = battleship;
             }
@@ -169,13 +170,13 @@ const gameboard = () => {
       function checkIsShip(coord){
         if(coord.ship == undefined) 
         return false;
-        else if(coord.ship.isSunk())  
+        else if(coord.ship)  
         return true;   //lol redudnat?
         else
         return false;
     }
 
-     return {turn,getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,checkIsShip,fillBoardRandom}; 
+     return {turn,getBoard,location,addShip,hitShip,prettyPrint,checkAllSunk,checkIsShip,fillBoardRandom,shipsArray}; 
 
       
 }

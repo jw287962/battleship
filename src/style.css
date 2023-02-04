@@ -89,18 +89,38 @@ body{
 
 }
 
-
-.restart{
+/* BUTTONS */
+button{
   background-color: white;
   border: 1px solid grey;
-  margin: 3px;
   border-radius: 5px;
   padding: 5px;
+  width: 100px;
+}
+.restart{
+  background-color: white;
+
+  margin: 3px;
+
   position: absolute;
   left: 0;
 }
 
-button:active{
+.restart:active{
   position: absolute;
 top: 20px;
+}
+
+button:active{
+  position: relative;
+  top: 2px
+}
+.hidden{
+    display: none;
+}
+
+.start{
+  width: 150px;
+  background-color: rgb(202, 242, 255);
+  margin: 10px;
 }
