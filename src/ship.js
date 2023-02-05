@@ -8,8 +8,7 @@ const Ship = (length = 2, isHorizontal = 0, sunk = false) => {
   }
 
    isHorizontal = Math.round(Math.random());
-   console.log(isHorizontal);
-  ship.horizontal = isHorizontal;
+  ship.horizontal = isHorizontal == 1;
 
   const hit = () =>{
     ship.hits += 1;

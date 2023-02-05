@@ -84,6 +84,7 @@ const shipCoord = [];
 
 sourceShipNameArray.forEach(element =>{
   let xy = element.id.split('');
+  console.log(element);
   shipCoord.push(+xy[0]);
   shipCoord.push(+xy[1]);
 });
@@ -91,15 +92,12 @@ let coordinate = (sourceData).split('');
 
 let sourceShip = player1.board.getBoard()[+coordinate[0]][+coordinate[1]].ship;
 // player1.board.getBoard()
-let difference = (shipCoord[shipCoord.length-2]*10+shipCoord[shipCoord.length-1]) - sourceData;
-let newPositionCoord = +e.target.id + difference - (shipCoord.length/2-1);
 
-if(newPositionCoord%10+(shipCoord.length/2) > 10){
-  return;
-}
+let targetID  = e.target.id
 
 
-checkUpdateGameBoard(newPositionCoord,shipCoord,sourceShip);
+
+checkUpdateGameBoard(shipCoord,sourceShip,sourceData,targetID);
 
 makeAGrid(player1Board);
 updateBoard();
@@ -120,35 +118,85 @@ updateBoard();
 //   })})
 // }
 
-function checkUpdateGameBoard(newPositionCoord,shipCoord,sourceShip){
-  let newPositionHolder = newPositionCoord;
-  for(let i =0; i < shipCoord.length;i++){
-    let  newShipCoordXY;
-    if(newPositionHolder<=9){
-      newShipCoordXY = (`0${newPositionHolder}`).split('');
-    }else
-      newShipCoordXY = (`${newPositionHolder}`).split('');
-    if(player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship &&
-    player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship != sourceShip)
-    return;
-    newPositionHolder++;
-    i++;
-  }
-  for(let i =0; i < shipCoord.length;i++){
+function checkUpdateGameBoard(shipCoord,sourceShip,sourceData,targetID){
+  if(!player1.board.getBoard()[+shipCoord[0]][+shipCoord[1]].ship.isShipHorizontal()){
     
-    player1.board.getBoard()[+shipCoord[i]][+shipCoord[i+1]].ship  = undefined;
-    i++;
+    let difference = (shipCoord[shipCoord.length-2]*10+shipCoord[shipCoord.length-1]) - sourceData;
+  let newPositionCoord = +targetID + difference - (shipCoord.length/2-1);
+  let newPositionHolder = newPositionCoord;
+  if(newPositionCoord%10+(shipCoord.length/2) > 10){
+    return;
   }
-  for(let i =0; i < shipCoord.length;i++){
-    let  newShipCoordXY;
-    if(newPositionCoord<=9){
-      newShipCoordXY = (`0${newPositionCoord}`).split('');
-    }else
-      newShipCoordXY = (`${newPositionCoord}`).split('');
-    player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship  = sourceShip;
-    i++;
-    newPositionCoord++;
+
+    for(let i =0; i < shipCoord.length;i++){   //check if target has ship
+      let  newShipCoordXY;
+      if(newPositionHolder<=9){
+        newShipCoordXY = (`0${newPositionHolder}`).split('');
+      }else
+        newShipCoordXY = (`${newPositionHolder}`).split('');
+      if(player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship &&
+      player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship != sourceShip)
+      return;
+      newPositionHolder++;
+      i++;
+    }
+    for(let i =0; i < shipCoord.length;i++){    //remove current ship
+      
+      player1.board.getBoard()[+shipCoord[i]][+shipCoord[i+1]].ship  = undefined;
+      i++;
+    }
+    for(let i =0; i < shipCoord.length;i++){   //add new ship
+      let  newShipCoordXY;
+      if(newPositionCoord<=9){
+        newShipCoordXY = (`0${newPositionCoord}`).split('');
+      }else
+        newShipCoordXY = (`${newPositionCoord}`).split('');
+      player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship  = sourceShip;
+      i++;
+      newPositionCoord++;
+    }
+  }else{
+
+    let difference = (shipCoord[shipCoord.length-2]*10+shipCoord[shipCoord.length-1]) - sourceData;
+    console.log(difference)
+    let newPositionCoord = +targetID + difference - (shipCoord.length/2-1)*10;
+    let newPositionHolder = newPositionCoord;
+    if(Math.round(newPositionCoord/10-0.49)+(shipCoord.length/2) > 10){
+      return;
+    }
+
+
+    for(let i =0; i < shipCoord.length;i++){   //check target has no ship
+      let  newShipCoordXY;
+      if(newPositionHolder<=9){
+        newShipCoordXY = (`0${newPositionHolder}`).split('');
+      }else
+        newShipCoordXY = (`${newPositionHolder}`).split('');
+        console.log(+newShipCoordXY[0],+newShipCoordXY[1])
+      if(player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship &&
+      player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship != sourceShip)
+      return;
+      newPositionHolder+=10;
+      i++;
+    }
+    for(let i =0; i < shipCoord.length;i++){  //remove current ship
+      player1.board.getBoard()[+shipCoord[i]][+shipCoord[i+1]].ship  = undefined;
+      i++;
+    }
+    for(let i =0; i < shipCoord.length;i++){  
+      let  newShipCoordXY;
+      if(newPositionCoord<=9){
+        newShipCoordXY = (`0${newPositionCoord}`).split('');
+      }else
+        newShipCoordXY = (`${newPositionCoord}`).split('');
+        console.log(+newShipCoordXY[0],+newShipCoordXY[1])
+      player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship  = sourceShip;
+      i++;
+      newPositionCoord+=10;
+    }
+
   }
+  
 }
     
 function draggingfunction(e){
