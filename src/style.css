@@ -41,7 +41,6 @@ body{
   display: grid;
   grid-template-columns: repeat(2,1fr);
   gap: 100px;
-
 }
 
 .box{
@@ -123,4 +122,19 @@ button:active{
   width: 150px;
   background-color: rgb(202, 242, 255);
   margin: 10px;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .gameboard{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .box{
+    height: 25px;
+    width: 25px;
+    border: 1px solid black;
+  }
 }
