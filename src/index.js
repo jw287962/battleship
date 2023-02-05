@@ -51,13 +51,28 @@ function addEventListenerGameStart(e){
 
   startGameDiv.classList.toggle('hidden');
   player2.board.getBoard().forEach(element => {
+    const box = document.querySelector('#playertwogrid');
+
     element.forEach( element=> {
       let number = "" + element.x+element.y;
-        const box = document.querySelector('#playertwogrid');
         box.childNodes[+number].addEventListener('click',evalulatePlayerClick);
-     
+        box.childNodes[+number].removeEventListener('dragstart',dragShip);
+        box.childNodes[+number].removeEventListener('dragover',draggingfunction);
+        box.childNodes[+number].removeEventListener('drop',dragShipEnd);
     })
   });
+
+  player1.board.getBoard().forEach(element => {
+    const box = document.querySelector('#playeronegrid');
+
+    element.forEach( element=> {
+      let number = "" + element.x+element.y;
+        box.childNodes[+number].removeEventListener('dragstart',dragShip);
+        box.childNodes[+number].removeEventListener('dragover',draggingfunction);
+        box.childNodes[+number].removeEventListener('drop',dragShipEnd);
+    })
+  });
+
 }
 
 function dragShip(e){
