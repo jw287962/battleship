@@ -57,7 +57,6 @@ fillAllShips();
               let coord = possibleMoves.splice(0,2);
                 let hitWhat = board.hitShip(coord[0],coord[1])
               while(possibleMoves.length !=0 &&  hitWhat == undefined ){
-                console.log(possibleMoves);
                 coord = possibleMoves.splice(0,2);
                 hitWhat  = board.hitShip(coord[0],coord[1]);
               };
@@ -77,12 +76,10 @@ fillAllShips();
                y = Math.round(Math.random() *9);
               movePossible = board.hitShip(x,y);
             }
-            console.log(movePossible, x,y);
           if(movePossible == true){
             shipCoordinates.push(x);
             shipCoordinates.push(y);
           }
-          console.log(shipCoordinates);
 
       
       }else{

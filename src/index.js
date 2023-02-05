@@ -18,7 +18,8 @@ const startGameDiv = document.querySelector('.start')
 newGameDiv.addEventListener('click',playGame);
 startGameDiv.addEventListener('click',addEventListenerGameStart);
 
-
+const player1Board = document.querySelector('#playeronegrid');
+const player2Board = document.querySelector('#playertwogrid');
 playGame();
 
 
@@ -30,8 +31,7 @@ function playGame(){
  player2 = player('AI',isAi,2);
   console.log("new game")
 
-const player1Board = document.querySelector('#playeronegrid');
-const player2Board = document.querySelector('#playertwogrid');
+
 checkTurn();
 
 makeAGrid(player1Board);
@@ -61,12 +61,13 @@ function addEventListenerGameStart(e){
 }
 
 function dragShip(e){
+  console.log(e.target.classList[2])
   // console.log(e.target.classList[2]);
   let shipName = e.target.classList[2];
   const ship = document.getElementsByClassName(shipName);
   // let shipCoordinate = [];
   // console.log(ship);
-  e.dataTransfer.setData("text", e.target.classList);
+  e.dataTransfer.setData("text", e.target.id);
   e.dataTransfer.dropEffect = "copy";
   // for(let i = 0; i < ship.length;i++){
   //   shipCoordinate.push(ship[i].id);
@@ -75,14 +76,77 @@ function dragShip(e){
 }
 
 function dragShipEnd(e){
-  console.log(e, 'dropend')
   e.preventDefault();
-let data = e.dataTransfer.getData("text");
-console.log(data);
-e.target.classList.add('ship');
+const sourceData = e.dataTransfer.getData("text");
+let sourceShipCoord = document.getElementById(`${sourceData}`);
+let sourceShipNameArray = document.querySelectorAll(`.${sourceShipCoord.classList[2]}`);
+const shipCoord = [];
+
+sourceShipNameArray.forEach(element =>{
+  let xy = element.id.split('');
+  shipCoord.push(+xy[0]);
+  shipCoord.push(+xy[1]);
+});
+let coordinate = (sourceData).split('');
+
+let sourceShip = player1.board.getBoard()[+coordinate[0]][+coordinate[1]].ship;
+// player1.board.getBoard()
+let difference = (shipCoord[shipCoord.length-2]*10+shipCoord[shipCoord.length-1]) - sourceData;
+let newPositionCoord = +e.target.id + difference - (shipCoord.length/2-1);
+
+if(newPositionCoord%10+(shipCoord.length/2) > 10){
+  return;
 }
-function onDropShip(e){
-console.log(e, 'on drop')
+let newPositionHolder = newPositionCoord;
+
+for(let i =0; i < shipCoord.length;i++){
+  let  newShipCoordXY;
+  if(newPositionHolder<=9){
+    newShipCoordXY = (`0${newPositionHolder}`).split('');
+  }else
+    newShipCoordXY = (`${newPositionHolder}`).split('');
+  if(player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship)
+  return;
+  newPositionHolder++;
+  i++;
+}
+for(let i =0; i < shipCoord.length;i++){
+  
+  player1.board.getBoard()[+shipCoord[i]][+shipCoord[i+1]].ship  = undefined;
+  i++;
+}
+for(let i =0; i < shipCoord.length;i++){
+  let  newShipCoordXY;
+  if(newPositionCoord<=9){
+    newShipCoordXY = (`0${newPositionCoord}`).split('');
+  }else
+    newShipCoordXY = (`${newPositionCoord}`).split('');
+  player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship  = sourceShip;
+  i++;
+  newPositionCoord++;
+}
+
+makeAGrid(player1Board);
+updateBoard();
+}
+
+// function updateShipsBoard(){
+//   player1.board.getBoard().forEach(element => {
+//     element.forEach( element=> {
+//       let num = 0;
+//       let number = "" + element.x+element.y;
+//         const box = document.querySelector('#playeronegrid');
+//         box.childNodes[+number].textContent = '';
+//       if(element.ship){
+
+//       }
+//       box.childNodes[+number].classList.add('miss');
+     
+//   })})
+// }
+    
+function draggingfunction(e){
+  e.preventDefault();
 }
 function makeAGrid(parentDiv){
   parentDiv.innerHTML = "";
@@ -97,8 +161,9 @@ function makeAGrid(parentDiv){
           boxGrid.addEventListener('dragstart',dragShip);
          
         }
-        boxGrid.addEventListener('ondrop',onDropShip);
-        boxGrid.addEventListener('dropend',dragShipEnd);
+        boxGrid.addEventListener('dragover',draggingfunction);
+        // boxGrid.addEventListener('dropend',dragShipEnd);
+        boxGrid.addEventListener('drop',dragShipEnd);
         parentDiv.appendChild(boxGrid);
     }
   }
