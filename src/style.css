@@ -1,15 +1,14 @@
 @font-face {
-  font-family: 'RobotoReg';
-  src: url('./asset/Roboto-Regular.ttf');
+  font-family: "RobotoReg";
+  src: url("./asset/Roboto-Regular.ttf");
 }
 @font-face {
-  font-family: 'RobotoBold';
-  src: url('./asset/Roboto-Bold.ttf');
+  font-family: "RobotoBold";
+  src: url("./asset/Roboto-Bold.ttf");
 }
 
-
-body{
-  font-family: 'RobotoReg',Arial, Helvetica, sans-serif;
+body {
+  font-family: "RobotoReg", Arial, Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +17,7 @@ body{
   width: 100vw;
 }
 
-.header{
+.header {
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -28,29 +27,36 @@ body{
   font-size: 25px;
 }
 
-
 /* making a board */
-#playeronegrid,#playertwogrid{
+#playeronegrid,
+#playertwogrid,
+#playeroneDisplay {
   display: grid;
-  grid-template-rows: repeat(10,1fr);
-  grid-template-columns: repeat(10,1fr);
-  
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
+}
+#playeroneDisplay {
+  position: absolute;
+  transform: translateY(-100%);
+}
+#playeroneDisplay > .box {
+  padding: 1px;
+  border: none;
 }
 
-.gameboard{
+.gameboard {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 100px;
 }
 
-.box{
+.box {
   height: 30px;
   width: 30px;
   border: 1px solid black;
 }
 
-
-.turn{
+.turn {
   font-family: RobotoBold, Arial, Helvetica, sans-serif;
   margin: 10px;
   border: 1px solid grey;
@@ -59,44 +65,84 @@ body{
   background-color: black;
 }
 
-
-.ship{
-  background-color: rgb(0, 217, 255);
+.ship {
+  background-color: rgb(99, 250, 255);
 }
 
-.hit::before{
-  content: "+";
-  display: flex;
-  justify-content: center;
-  color:black;
+/* each ship
+.ship1 {
+  background-color: grey;
+}
+
+.ship2 {
   background-color: red;
 }
 
+.ship3 {
+  background-color: rgb(238, 255, 0);
+}
+.ship4 {
+  background-color: rgb(5, 255, 151);
+}
+.ship5 {
+  background-color: rgb(28, 179, 15);
+}
+.ship6 {
+  background-color: rgb(0, 217, 255);
+  position: relative;
+} */
 
-.miss::before{
+.battleship1,
+.battleship2,
+.battleship3,
+.battleship4,
+.battleship5,
+.battleship6 {
+  background-image: url("./asset/carrier.svg");
+  /* transform:; */
+  /* transform: scaleY(5); */
+  /* transform: skew(2, 5); */
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border: none;
+  /* grid-column: 3/3;
+  grid-row: 3/8; */
+}
+
+/* each ship */
+
+.hit::before {
+  content: "+";
+  display: flex;
+  justify-content: center;
+  color: black;
+  background-color: red;
+}
+
+.miss::before {
   content: "--";
   display: flex;
   justify-content: center;
-  vertical-align:middle;
+  vertical-align: middle;
   align-items: center;
   font-weight: 800;
 }
 
-.sunk,.hit{
-  content: 'X';
+.sunk,
+.hit {
+  content: "X";
   background-color: red;
-
 }
 
 /* BUTTONS */
-button{
+button {
   background-color: white;
   border: 1px solid grey;
   border-radius: 5px;
   padding: 5px;
   width: 100px;
 }
-.restart{
+.restart {
   background-color: white;
 
   margin: 3px;
@@ -105,34 +151,33 @@ button{
   left: 0;
 }
 
-.restart:active{
+.restart:active {
   position: absolute;
-top: 20px;
+  top: 20px;
 }
 
-button:active{
+button:active {
   position: relative;
-  top: 2px
+  top: 2px;
 }
-.hidden{
-    display: none;
+.hidden {
+  display: none;
 }
 
-.start{
+.start {
   width: 150px;
   background-color: rgb(202, 242, 255);
   margin: 10px;
 }
 
-
 @media only screen and (max-width: 600px) {
-  .gameboard{
+  .gameboard {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
 
-  .box{
+  .box {
     height: 25px;
     width: 25px;
     border: 1px solid black;

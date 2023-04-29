@@ -17,6 +17,9 @@ newGameDiv.addEventListener("click", playGame);
 startGameDiv.addEventListener("click", addEventListenerGameStart);
 
 const player1Board = document.querySelector("#playeronegrid");
+
+const player1Display = document.querySelector("#playeroneDisplay");
+
 const player2Board = document.querySelector("#playertwogrid");
 playGame();
 
@@ -28,6 +31,7 @@ function playGame() {
   console.log("new game");
 
   makeAGrid(player1Board);
+  makeAGrid(player1Display);
   makeAGrid(player2Board);
 
   updateBoard();
@@ -37,6 +41,7 @@ function playGame() {
 
 function addEventListenerGameStart(e) {
   e.preventDefault();
+  updateDisplay();
   checkTurn();
 
   console.log("addListenrs");
@@ -83,30 +88,38 @@ function dragShip(e) {
 
 function dragShipEnd(e) {
   e.preventDefault();
-  const sourceData = e.dataTransfer.getData("text");
-  let sourceShipCoord = document.getElementById(`${sourceData}`);
+  const userClickedCoordinate = e.dataTransfer.getData("text");
+  let sourceShipCoord = document.getElementById(`${userClickedCoordinate}`);
   let sourceShipNameArray = document.querySelectorAll(
     `.${sourceShipCoord.classList[2]}`
   );
-  const shipCoord = [];
-
+  const shipCoords = [];
   sourceShipNameArray.forEach((element) => {
     let xy = element.id.split("");
     console.log(element);
-    shipCoord.push(+xy[0]);
-    shipCoord.push(+xy[1]);
+    shipCoords.push(+xy[0]);
+    shipCoords.push(+xy[1]);
   });
-  let coordinate = sourceData.split("");
+  let coordinate = userClickedCoordinate.split("");
 
-  let sourceShip =
+  let shipInstance =
     player1.board.getBoard()[+coordinate[0]][+coordinate[1]].ship;
+
+  console.log(shipInstance.getStartCoordinates);
   // player1.board.getBoard()
+  // console.log(sourceShip);
 
   let targetID = e.target.id;
 
-  checkUpdateGameBoard(shipCoord, sourceShip, sourceData, targetID);
+  checkUpdateGameBoard(
+    shipCoords,
+    shipInstance,
+    userClickedCoordinate,
+    targetID
+  );
 
   makeAGrid(player1Board);
+  makeAGrid(player1Display);
   updateBoard();
 }
 
@@ -125,52 +138,49 @@ function dragShipEnd(e) {
 //   })})
 // }
 
-function checkUpdateGameBoard(shipCoord, sourceShip, sourceData, targetID) {
+function checkUpdateGameBoard(shipCoord, shipInstance, sourceData, targetID) {
   let add;
   let difference;
   let newPositionCoord;
   let newPositionHolder;
-  if (
-    !player1.board
-      .getBoard()
-      [+shipCoord[0]][+shipCoord[1]].ship.isShipHorizontal()
-  ) {
-    add = 1;
-    difference =
-      shipCoord[shipCoord.length - 2] * 10 +
-      shipCoord[shipCoord.length - 1] -
-      sourceData;
-    newPositionCoord = +targetID + difference - (shipCoord.length / 2 - 1);
-    newPositionHolder = newPositionCoord;
-    if ((newPositionCoord % 10) + shipCoord.length / 2 > 10) {
-      return;
-    }
-  } else {
-    add = 10;
-    difference =
-      shipCoord[shipCoord.length - 2] * 10 +
-      shipCoord[shipCoord.length - 1] -
-      sourceData;
-    newPositionCoord = +targetID + difference - (shipCoord.length / 2 - 1) * 10;
-    newPositionHolder = newPositionCoord;
 
-    if (Math.round(newPositionCoord / 10 - 0.49) + shipCoord.length / 2 > 10) {
-      return;
-    }
+  // coordinates add to determine current ship's next coordinates
+  !player1.board
+    .getBoard()
+    [+shipCoord[0]][+shipCoord[1]].ship.isShipHorizontal()
+    ? (add = 1)
+    : (add = 10);
+
+  newPositionCoord = findStartPosition(
+    add,
+    shipCoord,
+    findCoordinateDifference(shipCoord, sourceData),
+    targetID
+  );
+
+  if (
+    checkNewCoordinatePossible(
+      player1.board.getBoard()[+shipCoord[0]][+shipCoord[1]].ship,
+      shipCoord,
+      newPositionCoord
+    )
+  ) {
+    return;
   }
 
+  newPositionHolder = newPositionCoord;
+
+  // iterates through ship coordinates.
   for (let i = 0; i < shipCoord.length; i++) {
     //check target has no ship
-    let newShipCoordXY;
-    if (newPositionHolder <= 9) {
-      newShipCoordXY = `0${newPositionHolder}`.split("");
-    } else newShipCoordXY = `${newPositionHolder}`.split("");
+    let newShipCoordXY = getNewShipCoordinate(newPositionHolder);
     if (
       player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship &&
       player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship !=
-        sourceShip
+        shipInstance
     )
       return;
+
     newPositionHolder += add;
     i++;
   }
@@ -180,16 +190,42 @@ function checkUpdateGameBoard(shipCoord, sourceShip, sourceData, targetID) {
     i++;
   }
   for (let i = 0; i < shipCoord.length; i++) {
-    let newShipCoordXY;
-    if (newPositionCoord <= 9) {
-      newShipCoordXY = `0${newPositionCoord}`.split("");
-    } else newShipCoordXY = `${newPositionCoord}`.split("");
+    let newShipCoordXY = getNewShipCoordinate(newPositionCoord);
+
+    if (i === 0)
+      shipInstance.setStartCoordinates(+newShipCoordXY[0], +newShipCoordXY[1]);
+
     console.log(+newShipCoordXY[0], +newShipCoordXY[1]);
     player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship =
-      sourceShip;
+      shipInstance;
     i++;
     newPositionCoord += add;
   }
+}
+function checkNewCoordinatePossible(playerShip, shipCoord, newPositionCoord) {
+  if (!playerShip.isShipHorizontal()) {
+    if ((newPositionCoord % 10) + shipCoord.length / 2 > 10) return true;
+  } else {
+    if (Math.round(newPositionCoord / 10 - 0.49) + shipCoord.length / 2 > 10)
+      return;
+  }
+}
+
+function findCoordinateDifference(shipCoord, sourceData) {
+  return (
+    shipCoord[shipCoord.length - 2] * 10 +
+    shipCoord[shipCoord.length - 1] -
+    sourceData
+  );
+}
+function findStartPosition(add, shipCoord, difference, targetID) {
+  return +targetID + difference - (shipCoord.length / 2 - 1) * add;
+}
+
+function getNewShipCoordinate(newPositionCoord) {
+  if (newPositionCoord <= 9) {
+    return `0${newPositionCoord}`.split("");
+  } else return `${newPositionCoord}`.split("");
 }
 
 function draggingfunction(e) {
@@ -254,7 +290,6 @@ function evalulatePlayerClick(e) {
   player2.board.turn++;
   player1.shootCoordinates(0, 0, player2.isAI);
   updateBoard();
-
   checkTurn();
 
   checkWinner();
@@ -268,6 +303,53 @@ function checkTurn() {
     turnDiv.textContent = "PLAYER TWO TURN";
   }
 }
+
+function updateDisplay() {
+  const box = document.querySelector("#playeroneDisplay");
+  player1.board.shipsArray.forEach((ship) => {
+    const coord = ship.getStartCoordinates();
+    const shipLength = ship.getShip().length;
+    let number = "" + coord[0] + coord[1];
+    // if (ship.getShip() === element.ship.getShip()) {
+    let translateAmount = 36;
+    let translateFix = 1;
+    switch (shipLength) {
+      case 2:
+        translateFix = 1.2;
+        break;
+      case 4:
+        translateFix = 0.9;
+        break;
+      case 5:
+        translateFix = 0.8;
+        break;
+      default:
+        translateFix = 1;
+    }
+
+    box.childNodes[+number].classList.toggle(`battleship${shipLength}`);
+    if (!ship.isShipHorizontal()) {
+      // box.childNodes[+number].classList.toggle(`horizontal`);
+      box.childNodes[
+        +number
+      ].style.transform = `scale(${shipLength}) translateX(${translateAmount}%) translateY(${
+        translateAmount * translateFix
+      }%)`;
+    } else {
+      // box.childNodes[+number].classList.toggle(`vertical`);
+      box.childNodes[
+        +number
+      ].style.transform = `rotate(90deg) scale(${shipLength}) translateX(${translateAmount}%) translateY(${
+        translateAmount * translateFix
+      }%) `;
+    }
+    // }
+  });
+}
+//       }
+//     });
+//   });
+// }
 function updateBoard() {
   player1.board.getBoard().forEach((element) => {
     element.forEach((element) => {
@@ -293,7 +375,6 @@ function updateBoard() {
       }
     });
   });
-
   player2.board.getBoard().forEach((element) => {
     element.forEach((element) => {
       let number = "" + element.x + element.y;
@@ -325,25 +406,3 @@ function checkWinner() {
     player2.won();
   }
 }
-
-// function findMoveAI(){
-//   let x = Math.round(Math.random() *9);
-//   let y = Math.round(Math.random() *9);
-
-//     let movePossible = player1.board.hitShip(x,y);
-
-//      while(movePossible === undefined){
-//         let x = Math.round(Math.random() *9);
-//         let y = Math.round(Math.random() *9);
-
-//       }
-//       if(movePossible == true){
-
-//       }
-//       movePossible = player1.board.hitShip(x,y);
-//      // while(movePossible === undefined){
-//     //     let x = Math.round(Math.random() *9);
-//     //     let y = Math.round(Math.random() *9);
-//     //     movePossible = player2.board.hitShip(x,y);
-//     //   }
-// }
