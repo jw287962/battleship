@@ -311,11 +311,11 @@ function updateDisplay() {
     const shipLength = ship.getShip().length;
     let number = "" + coord[0] + coord[1];
     // if (ship.getShip() === element.ship.getShip()) {
-    let translateAmount = 36;
+    let translateXAmount = 36;
     let translateFix = 1;
     switch (shipLength) {
       case 2:
-        translateFix = 1.2;
+        translateFix = 1.6;
         break;
       case 4:
         translateFix = 0.9;
@@ -326,21 +326,29 @@ function updateDisplay() {
       default:
         translateFix = 1;
     }
+    switch (shipLength) {
+      case 2:
+        translateXAmount = 28;
+        break;
+      case 5:
+        translateXAmount = 38;
+        break;
+    }
 
     box.childNodes[+number].classList.toggle(`battleship${shipLength}`);
     if (!ship.isShipHorizontal()) {
       // box.childNodes[+number].classList.toggle(`horizontal`);
       box.childNodes[
         +number
-      ].style.transform = `scale(${shipLength}) translateX(${translateAmount}%) translateY(${
-        translateAmount * translateFix
+      ].style.transform = `scale(${shipLength}) translateX(${translateXAmount}%) translateY(${
+        translateXAmount * translateFix
       }%)`;
     } else {
       // box.childNodes[+number].classList.toggle(`vertical`);
       box.childNodes[
         +number
-      ].style.transform = `rotate(90deg) scale(${shipLength}) translateX(${translateAmount}%) translateY(${
-        translateAmount * translateFix
+      ].style.transform = `rotate(90deg) scale(${shipLength}) translateX(${translateXAmount}%) translateY(${
+        translateXAmount * translateFix
       }%) `;
     }
     // }
