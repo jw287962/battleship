@@ -51,9 +51,10 @@ body {
 }
 
 .box {
-  height: 30px;
-  width: 30px;
+  height: 50px;
+  width: 50px;
   border: 1px solid black;
+  z-index: 99;
 }
 
 .turn {
@@ -69,29 +70,6 @@ body {
   background-color: rgb(99, 250, 255);
 }
 
-/* each ship
-.ship1 {
-  background-color: grey;
-}
-
-.ship2 {
-  background-color: red;
-}
-
-.ship3 {
-  background-color: rgb(238, 255, 0);
-}
-.ship4 {
-  background-color: rgb(5, 255, 151);
-}
-.ship5 {
-  background-color: rgb(28, 179, 15);
-}
-.ship6 {
-  background-color: rgb(0, 217, 255);
-  position: relative;
-} */
-
 .battleship1,
 .battleship2,
 .battleship3,
@@ -99,39 +77,43 @@ body {
 .battleship5,
 .battleship6 {
   background-image: url("./asset/carrier.svg");
-  /* transform:; */
-  /* transform: scaleY(5); */
-  /* transform: skew(2, 5); */
+
   background-repeat: no-repeat;
   background-size: 100%;
   border: none;
-  /* grid-column: 3/3;
-  grid-row: 3/8; */
 }
 
 /* each ship */
-
+.hit,
+.sunk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .hit::before {
-  content: "+";
+  content: "";
   display: flex;
   justify-content: center;
   color: black;
-  background-color: red;
-}
+  border: 8px solid red;
 
-.miss::before {
-  content: "--";
+  border-radius: 50%;
+}
+.miss {
+  background-color: rgb(195, 247, 195);
+  opacity: 100%;
+}
+/* .miss::before {
   display: flex;
   justify-content: center;
   vertical-align: middle;
   align-items: center;
   font-weight: 800;
-}
+} */
 
-.sunk,
-.hit {
+.sunk::before {
   content: "X";
-  background-color: red;
+  color: red;
 }
 
 /* BUTTONS */
@@ -170,7 +152,7 @@ button:active {
   margin: 10px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 900px) {
   .gameboard {
     display: flex;
     flex-direction: column;
@@ -178,8 +160,21 @@ button:active {
   }
 
   .box {
-    height: 25px;
-    width: 25px;
+    height: 50px;
+    width: 50px;
+    border: 1px solid black;
+  }
+}
+@media only screen and (max-width: 550px) {
+  .gameboard {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .box {
+    height: 30px;
+    width: 30px;
     border: 1px solid black;
   }
 }

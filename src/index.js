@@ -34,7 +34,7 @@ function playGame() {
   makeAGrid(player1Display);
   makeAGrid(player2Board);
 
-  updateBoard();
+  setShiponBoard();
 }
 
 // playGame();  //will need to change for when there is a user interface
@@ -53,9 +53,9 @@ function addEventListenerGameStart(e) {
     element.forEach((element) => {
       let number = "" + element.x + element.y;
       box.childNodes[+number].addEventListener("click", evalulatePlayerClick);
-      box.childNodes[+number].removeEventListener("dragstart", dragShip);
-      box.childNodes[+number].removeEventListener("dragover", draggingfunction);
-      box.childNodes[+number].removeEventListener("drop", dragShipEnd);
+      // box.childNodes[+number].removeEventListener("dragstart", dragShip);
+      // box.childNodes[+number].removeEventListener("dragover", draggingfunction);
+      // box.childNodes[+number].removeEventListener("drop", dragShipEnd);
     });
   });
 
@@ -65,6 +65,7 @@ function addEventListenerGameStart(e) {
     element.forEach((element) => {
       let number = "" + element.x + element.y;
       box.childNodes[+number].removeEventListener("dragstart", dragShip);
+      box.childNodes[+number].classList.remove("ship");
       box.childNodes[+number].removeEventListener("dragover", draggingfunction);
       box.childNodes[+number].removeEventListener("drop", dragShipEnd);
     });
@@ -85,7 +86,9 @@ function dragShip(e) {
 
   // }
 }
-
+function draggingfunction(e) {
+  e.preventDefault();
+}
 function dragShipEnd(e) {
   e.preventDefault();
   const userClickedCoordinate = e.dataTransfer.getData("text");
@@ -96,7 +99,6 @@ function dragShipEnd(e) {
   const shipCoords = [];
   sourceShipNameArray.forEach((element) => {
     let xy = element.id.split("");
-    console.log(element);
     shipCoords.push(+xy[0]);
     shipCoords.push(+xy[1]);
   });
@@ -120,30 +122,16 @@ function dragShipEnd(e) {
 
   makeAGrid(player1Board);
   makeAGrid(player1Display);
-  updateBoard();
+  setShiponBoard();
 }
 
-// function updateShipsBoard(){
-//   player1.board.getBoard().forEach(element => {
-//     element.forEach( element=> {
-//       let num = 0;
-//       let number = "" + element.x+element.y;
-//         const box = document.querySelector('#playeronegrid');
-//         box.childNodes[+number].textContent = '';
-//       if(element.ship){
-
-//       }
-//       box.childNodes[+number].classList.add('miss');
-
-//   })})
 // }
 
 function checkUpdateGameBoard(shipCoord, shipInstance, sourceData, targetID) {
   let add;
-  let difference;
   let newPositionCoord;
   let newPositionHolder;
-
+  console.log(shipCoord);
   // coordinates add to determine current ship's next coordinates
   !player1.board
     .getBoard()
@@ -167,10 +155,12 @@ function checkUpdateGameBoard(shipCoord, shipInstance, sourceData, targetID) {
   ) {
     return;
   }
-
+  console.log(newPositionCoord);
   newPositionHolder = newPositionCoord;
 
   // iterates through ship coordinates.
+  console.log("lenmgth", shipCoord.length);
+
   for (let i = 0; i < shipCoord.length; i++) {
     //check target has no ship
     let newShipCoordXY = getNewShipCoordinate(newPositionHolder);
@@ -195,7 +185,7 @@ function checkUpdateGameBoard(shipCoord, shipInstance, sourceData, targetID) {
     if (i === 0)
       shipInstance.setStartCoordinates(+newShipCoordXY[0], +newShipCoordXY[1]);
 
-    console.log(+newShipCoordXY[0], +newShipCoordXY[1]);
+    // console.log(+newShipCoordXY[0], +newShipCoordXY[1]);
     player1.board.getBoard()[+newShipCoordXY[0]][+newShipCoordXY[1]].ship =
       shipInstance;
     i++;
@@ -211,26 +201,28 @@ function checkNewCoordinatePossible(playerShip, shipCoord, newPositionCoord) {
   }
 }
 
+// find start*(aka end) edge of ship (bottom or right edge)
 function findCoordinateDifference(shipCoord, sourceData) {
-  return (
+  const answer =
     shipCoord[shipCoord.length - 2] * 10 +
     shipCoord[shipCoord.length - 1] -
-    sourceData
-  );
+    sourceData;
+  // console.log(shipCoord, "-", sourceData, "difference", answer);
+
+  return answer;
 }
 function findStartPosition(add, shipCoord, difference, targetID) {
+  // console.log(add, "-", shipCoord, "-", difference, "-", targetID);
   return +targetID + difference - (shipCoord.length / 2 - 1) * add;
 }
 
 function getNewShipCoordinate(newPositionCoord) {
+  console.log(newPositionCoord);
   if (newPositionCoord <= 9) {
     return `0${newPositionCoord}`.split("");
   } else return `${newPositionCoord}`.split("");
 }
 
-function draggingfunction(e) {
-  e.preventDefault();
-}
 function makeAGrid(parentDiv) {
   parentDiv.innerHTML = "";
   for (let i = 0; i < 10; i++) {
@@ -281,7 +273,7 @@ function evalulatePlayerClick(e) {
       player1.board.turn--;
       return;
     }
-    updateBoard();
+    updateBoardGameLive();
     checkWinner();
   } else {
     console.log("ALL UNITS MUST ATTACK ENEMY.");
@@ -289,7 +281,7 @@ function evalulatePlayerClick(e) {
   }
   player2.board.turn++;
   player1.shootCoordinates(0, 0, player2.isAI);
-  updateBoard();
+  updateBoardGameLive();
   checkTurn();
 
   checkWinner();
@@ -358,7 +350,34 @@ function updateDisplay() {
 //     });
 //   });
 // }
-function updateBoard() {
+
+// BEFORE GAME STARTS
+function setShiponBoard() {
+  const box = document.querySelector("#playeronegrid");
+
+  console.log(player1.board.prettyPrint());
+  player1.board.getBoard().forEach((element) => {
+    element.forEach((element) => {
+      let number = "" + element.x + element.y;
+      if (!element.ship) {
+        return box.childNodes[+number].classList.remove(`ship`);
+      }
+      if (element.ship.getShip()) {
+        let num = 0;
+
+        player1.board.shipsArray.forEach((ship) => {
+          if (ship.getShip() === element.ship.getShip()) {
+            box.childNodes[+number].classList.add(`ship`);
+            box.childNodes[+number].classList.add(`ship${num}`);
+          }
+          num++;
+        });
+      }
+    });
+  });
+}
+// WHEN GAME STARTS
+function updateBoardGameLive() {
   player1.board.getBoard().forEach((element) => {
     element.forEach((element) => {
       let num = 0;
@@ -375,7 +394,6 @@ function updateBoard() {
       else if (element.ship) {
         player1.board.shipsArray.forEach((ship) => {
           if (ship.getShip() === element.ship.getShip()) {
-            box.childNodes[+number].classList.toggle(`ship`);
             box.childNodes[+number].classList.add(`ship${num}`);
           }
           num++;
@@ -396,8 +414,6 @@ function updateBoard() {
         box.childNodes[+number].classList.add("sunk");
       } else if (element.hit == true)
         box.childNodes[+number].classList.add("hit");
-      // else if(element.ship)
-      // box.childNodes[+number].textContent = "S";
     });
   });
 }
