@@ -90,6 +90,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 .hit::before {
   content: "";
   display: flex;
@@ -100,17 +101,13 @@ body {
   border-radius: 50%;
 }
 .miss {
-  background-color: rgb(195, 247, 195);
-  opacity: 100%;
+  background-color: rgb(195, 237, 247);
+  opacity: 90%;
 }
-/* .miss::before {
-  display: flex;
-  justify-content: center;
-  vertical-align: middle;
-  align-items: center;
+.sunk {
   font-weight: 800;
-} */
-
+  font-size: 30px;
+}
 .sunk::before {
   content: "X";
   color: red;
