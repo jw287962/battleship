@@ -73,7 +73,6 @@ function addEventListenerGameStart(e) {
 }
 
 function dragShip(e) {
-  console.log(e.target.classList[2]);
   // console.log(e.target.classList[2]);
   let shipName = e.target.classList[2];
   const ship = document.getElementsByClassName(shipName);
@@ -107,7 +106,6 @@ function dragShipEnd(e) {
   let shipInstance =
     player1.board.getBoard()[+coordinate[0]][+coordinate[1]].ship;
 
-  console.log(shipInstance.getStartCoordinates);
   // player1.board.getBoard()
   // console.log(sourceShip);
 
@@ -131,7 +129,6 @@ function checkUpdateGameBoard(shipCoord, shipInstance, sourceData, targetID) {
   let add;
   let newPositionCoord;
   let newPositionHolder;
-  console.log(shipCoord);
   // coordinates add to determine current ship's next coordinates
   !player1.board
     .getBoard()
@@ -155,11 +152,9 @@ function checkUpdateGameBoard(shipCoord, shipInstance, sourceData, targetID) {
   ) {
     return;
   }
-  console.log(newPositionCoord);
   newPositionHolder = newPositionCoord;
 
   // iterates through ship coordinates.
-  console.log("lenmgth", shipCoord.length);
 
   for (let i = 0; i < shipCoord.length; i++) {
     //check target has no ship
@@ -256,7 +251,6 @@ function evalulatePlayerClick(e) {
     let coord = e.target.id.split("");
     if (player1.board.checkIsShip(player1.board.location(coord[0], coord[1]))) {
       // var data = e.dataTransfer.getData(e.target);
-      console.log(e.dataTransfer.setData("text", "hi"));
     }
 
     return;
