@@ -34,7 +34,7 @@ function playGame() {
   makeAGrid(player1Display);
   makeAGrid(player2Board);
 
-  setShiponBoard();
+  setPreliminaryBoard();
 }
 
 // playGame();  //will need to change for when there is a user interface
@@ -71,7 +71,7 @@ function addEventListenerGameStart(e) {
     });
   });
 }
-
+// before game starts
 function dragShip(e) {
   // console.log(e.target.classList[2]);
   let shipName = e.target.classList[2];
@@ -120,7 +120,7 @@ function dragShipEnd(e) {
 
   makeAGrid(player1Board);
   makeAGrid(player1Display);
-  setShiponBoard();
+  setPreliminaryBoard();
 }
 
 // }
@@ -218,6 +218,7 @@ function getNewShipCoordinate(newPositionCoord) {
   } else return `${newPositionCoord}`.split("");
 }
 
+// default grid for gameboard
 function makeAGrid(parentDiv) {
   parentDiv.innerHTML = "";
   for (let i = 0; i < 10; i++) {
@@ -238,6 +239,7 @@ function makeAGrid(parentDiv) {
   }
 }
 
+// for after game started
 function evalulatePlayerClick(e) {
   e.preventDefault();
   if (player1.isWinner() || player2.isWinner()) {
@@ -304,10 +306,10 @@ function updateDisplay() {
         translateFix = 1.6;
         break;
       case 4:
-        translateFix = 0.9;
+        translateFix = 0.88;
         break;
       case 5:
-        translateFix = 0.8;
+        translateFix = 0.75;
         break;
       default:
         translateFix = 1;
@@ -346,7 +348,7 @@ function updateDisplay() {
 // }
 
 // BEFORE GAME STARTS
-function setShiponBoard() {
+function setPreliminaryBoard() {
   const box = document.querySelector("#playeronegrid");
 
   console.log(player1.board.prettyPrint());

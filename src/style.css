@@ -160,8 +160,8 @@ button:active {
   }
 
   .box {
-    height: 50px;
-    width: 50px;
+    height: 38px;
+    width: 38px;
     border: 1px solid black;
   }
 }
