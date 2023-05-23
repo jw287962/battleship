@@ -1,7 +1,7 @@
 import {
   checkWinner,
   updateBoardGameLive,
-  updateDisplay,
+  updateDisplayWithShipImage,
   checkUpdateGameBoard,
   setPreliminaryBoard,
   evalulatePlayerClick,
@@ -16,7 +16,7 @@ const player = require("./player");
 import css from "./style.css";
 
 let isAi = true;
-
+addInfoHelper();
 export let player1 = player("Player1", !isAi, 1);
 export let player2 = player("AI", isAi, 2);
 
@@ -51,7 +51,7 @@ function playGame() {
 
 function addEventListenerGameStart(e) {
   e.preventDefault();
-  updateDisplay();
+  updateDisplayWithShipImage();
   checkTurn();
 
   console.log("addListenrs");
@@ -83,3 +83,24 @@ function addEventListenerGameStart(e) {
 }
 
 // }
+
+function addInfoHelper() {
+  const info = document.querySelector(".info");
+  const newDiv = document.createElement("div");
+  newDiv.classList.add("infotext");
+  newDiv.classList.add("hidden");
+  info.appendChild(newDiv);
+  info.addEventListener("mouseover", showHelp);
+  info.addEventListener("mouseout", removeHelp);
+}
+
+function showHelp() {
+  const infotext = document.querySelector(".infotext");
+  infotext.classList.remove("hidden");
+  infotext.textContent = "Double Click to Rotate";
+}
+
+function removeHelp() {
+  const infotext = document.querySelector(".infotext");
+  infotext.classList.add("hidden");
+}

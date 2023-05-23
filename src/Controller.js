@@ -68,7 +68,7 @@ function checkTurn() {
   }
 }
 
-function updateDisplay() {
+function updateDisplayWithShipImage() {
   const box = document.querySelector("#playeroneDisplay");
   player1.board.shipsArray.forEach((ship) => {
     const coord = ship.getStartCoordinates();
@@ -467,7 +467,7 @@ function getNewShipCoordinate(newPositionCoord) {
 export {
   checkWinner,
   updateBoardGameLive,
-  updateDisplay,
+  updateDisplayWithShipImage,
   checkUpdateGameBoard,
   setPreliminaryBoard,
   evalulatePlayerClick,
