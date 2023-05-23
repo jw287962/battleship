@@ -54,8 +54,6 @@ function addEventListenerGameStart(e) {
   updateDisplayWithShipImage();
   checkTurn();
 
-  console.log("addListenrs");
-
   startGameDiv.classList.toggle("hidden");
   player2.board.getBoard().forEach((element) => {
     const box = document.querySelector("#playertwogrid");
@@ -63,9 +61,6 @@ function addEventListenerGameStart(e) {
     element.forEach((element) => {
       let number = "" + element.x + element.y;
       box.childNodes[+number].addEventListener("click", evalulatePlayerClick);
-      // box.childNodes[+number].removeEventListener("dragstart", dragShip);
-      // box.childNodes[+number].removeEventListener("dragover", draggingfunction);
-      // box.childNodes[+number].removeEventListener("drop", dragShipEnd);
     });
   });
 
