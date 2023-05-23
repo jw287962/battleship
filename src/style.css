@@ -133,7 +133,7 @@ button {
 
 .restart:active {
   position: absolute;
-  top: 20px;
+  top: 2px;
 }
 
 button:active {
