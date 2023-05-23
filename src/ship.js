@@ -16,6 +16,10 @@ const Ship = (length = 2, isHorizontal = 0, sunk = false) => {
   function isShipHorizontal() {
     return ship.horizontal;
   }
+  function updateShipDirection() {
+    ship.horizontal = !ship.horizontal;
+    console.log(ship.horizontal);
+  }
   const getShip = () => {
     return ship;
   };
@@ -39,6 +43,7 @@ const Ship = (length = 2, isHorizontal = 0, sunk = false) => {
     isShipHorizontal,
     setStartCoordinates,
     getStartCoordinates,
+    updateShipDirection,
   };
 };
 

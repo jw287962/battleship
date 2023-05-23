@@ -40,9 +40,6 @@ const player = (name, isAInt, number = 1) => {
       y = Math.round(Math.random() * 9);
 
       if (shipCoordinates.length >= 1 || possibleMoves.length >= 1) {
-        // if(board.checkIsShip(board.location(shipCoordinates[0],shipCoordinates[1])))
-        //   shipCoordinates.splice(0,shipCoordinates.length);
-        //   else{
         if (shipCoordinates.length >= 1) {
           x = shipCoordinates.splice(0, 1)[0];
           y = shipCoordinates.splice(0, 1)[0];
@@ -52,19 +49,19 @@ const player = (name, isAInt, number = 1) => {
           possibleMoves.push(x, y + 1);
         }
         let coord = possibleMoves.splice(0, 2);
-        let hitWhat = board.hitShip(coord[0], coord[1]);
-        while (possibleMoves.length != 0 && hitWhat == undefined) {
+        let possibleMoveCoordinate = board.hitShip(coord[0], coord[1]);
+        while (
+          possibleMoves.length != 0 &&
+          possibleMoveCoordinate == undefined
+        ) {
           coord = possibleMoves.splice(0, 2);
-          hitWhat = board.hitShip(coord[0], coord[1]);
+          possibleMoveCoordinate = board.hitShip(coord[0], coord[1]);
         }
-        if (hitWhat != undefined) {
-          // console.log(hitWhat);
-          if (hitWhat) {
-            shipCoordinates.push(coord[0]);
-            shipCoordinates.push(coord[1]);
-          }
-          return;
+        if (possibleMoveCoordinate) {
+          shipCoordinates.push(coord[0]);
+          shipCoordinates.push(coord[1]);
         }
+        return;
       }
       let movePossible = board.hitShip(x, y);
 
@@ -78,7 +75,6 @@ const player = (name, isAInt, number = 1) => {
         shipCoordinates.push(y);
       }
     } else {
-      console.log("human");
       board.hitShip(x, y);
     }
   }
@@ -86,6 +82,8 @@ const player = (name, isAInt, number = 1) => {
     return winner;
   }
   function won() {
+    const turnDiv = document.querySelector(".turn");
+    turnDiv.textContent = `${playerName} WON`;
     winner = true;
   }
   function getName() {
